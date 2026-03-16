@@ -28,7 +28,7 @@
 
 shipname=libsdl
 shipversion=1.2.15
-shipsources="https://github.com/libsdl-org/SDL-1.2/archive/refs/tags/release-1.2.15.tar.gz libsdl.patch"
+shipsources="https://github.com/libsdl-org/SDL-1.2/archive/refs/tags/release-1.2.15.tar.gz libsdl.patch sdl-config.sh"
 shiptugs=""
 shipfunnels=1
 
@@ -40,7 +40,6 @@ build() {
 	msg "Patching sources..."
 	# Patch sources
 	patch -p 1 <../libsdl.patch
-
 
 	# Run autoreconf
 	msg "Building configure script..."
@@ -62,6 +61,7 @@ build() {
 		--enable-arts=no \
 		--enable-nas=no \
 		--enable-sndio=no \
+		--enable-video-helenos=yes \
 		--enable-video-wayland=no \
 		--enable-video-rpi=no \
 		--enable-video-x11=no \
@@ -90,4 +90,9 @@ package() {
 
 	run mkdir -p "$HSCT_MY_DIR/lib"
 	run cp PKG/usr/local/lib/*.a "$HSCT_MY_DIR/lib"
+
+	cd ..
+	run mkdir -p "$HSCT_APP_DIR"
+	run cp sdl-config.sh "$HSCT_APP_DIR/sdl-config"
+	chmod 755 "$HSCT_APP_DIR/sdl-config"
 }

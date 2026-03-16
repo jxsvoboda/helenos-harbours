@@ -1,6 +1,7 @@
 #!/bin/sh
 
 #
+# Copyright (c) 2026 Jiri Svoboda
 # Copyright (c) 2013-2017 Vojtech Horky
 # All rights reserved.
 #
@@ -60,6 +61,7 @@ HSCT_HSCT="$HSCT_HOME/hsct.sh"
 
 HSCT_BUILD_DIR=`pwd`/build
 HSCT_INCLUDE_DIR=`pwd`/include
+HSCT_APP_DIR=`pwd`/app
 HSCT_LIB_DIR=`pwd`/libs
 HSCT_DIST_DIR="`pwd`/dist/"
 HSCT_ARCHIVE_DIR="`pwd`/archives/"
@@ -330,6 +332,7 @@ hsct_build() {
 
 # Pseudo-installation - copy from build directory to "my" directory, copy libraries
 hsct_package() {
+	mkdir -p "$HSCT_APP_DIR" || { hsct_error "Failed to create application directory."; return 67; }
 	mkdir -p "$HSCT_INCLUDE_DIR" || { hsct_error "Failed to create include directory."; return 67; }
 	mkdir -p "$HSCT_LIB_DIR" || { hsct_error "Failed to create library directory."; return 67; }
 	mkdir -p "$HSCT_MY_DIR" || { hsct_error "Failed to create package directory."; return 67; }
@@ -547,6 +550,7 @@ hsct_print_vars() {
 
 	echo "export HSCT_ARFLAGS='$HELENOS_ARFLAGS'"
 	echo "export HSCT_CPPFLAGS='-isystem $HSCT_INCLUDE_DIR $HELENOS_CPPFLAGS'"
+	echo "export HSCT_INCLUDE_DIR='$HSCT_INCLUDE_DIR'"
 	echo "export HSCT_CFLAGS='$HELENOS_CFLAGS'"
 	echo "export HSCT_CXXFLAGS='$HELENOS_CXXFLAGS'"
 	echo "export HSCT_ASFLAGS='$HELENOS_ASFLAGS'"
@@ -567,7 +571,7 @@ hsct_print_vars() {
 	echo "export HSCT_CONFIGURE_ARGS='--build=`sh $HSCT_HOME/config.guess` --host=$target $cvars'"
 
 	echo "export HELENOS_CROSS_PATH=$HELENOS_CROSS_PATH"
-	echo "export PATH='$PWD/facade:$HELENOS_CROSS_PATH:$PATH'"
+	echo "export PATH='$PWD/facade:$PWD/app:$HELENOS_CROSS_PATH:$PATH'"
 }
 
 hsct_pkg() {
