@@ -1,0 +1,45 @@
+#!/bin/sh
+
+oper="none"
+package="none"
+
+function do_output()
+{
+	echo "$@"
+}
+
+function pkg_config_libui()
+{
+	case "$1" in
+	cflags)
+		do_output "-I$HELENOS_EXPORT_ROOT"/include/libui \
+		    "-I$HELENOS_EXPORT_ROOT"/include/libdisplay \
+		    "-I$HELENOS_EXPORT_ROOT"/include/libgfx \
+		    "-I$HELENOS_EXPORT_ROOT"/include/libinput \
+		    "-I$HELENOS_EXPORT_ROOT"/include/libconsole;;
+	libs)
+		do_output "";;
+	esac
+}
+
+while [ ."$1" != . ] ; do
+	case "$1" in
+	--cflags)
+		oper="cflags";;
+	--libs)
+		oper="libs";;
+	*)
+		package="$1";;
+	esac
+
+	shift 1
+done
+
+if [ "$oper" = "none" ]; then
+	exit 0
+fi
+
+case "$package" in
+libui)
+	pkg_config_libui "$oper";;
+esac
