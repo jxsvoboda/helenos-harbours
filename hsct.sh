@@ -521,6 +521,14 @@ hsct_init() {
 		return 77
 	fi
 
+	mkdir -p "$HSCT_APP_DIR" || { hsct_error "Failed to create application directory."; return 77; }
+	(
+		cd $HSCT_HOME/tools
+		for x in *; do
+			install -m 755 "$x" "$HSCT_APP_DIR/$x"
+		done
+	)
+
 	hsct_save_config
 
 	return 0
