@@ -5,7 +5,7 @@ while [ ."$1" != . ] ; do
 	--cflags)
 		echo "-I$HSCT_INCLUDE_DIR/SDL -D_GNU_SOURCE=1 -D_REENTRANT";;
 	--libs)
-		echo "libSDL.a";;
+		echo "-lSDL -lui -ldisplay -lgfx -lgfxfont -lriff -lipcgfx -lmemgfx -lconsole -lcongfx";;
 	--version)
 		echo "1.2.68";;
 	esac

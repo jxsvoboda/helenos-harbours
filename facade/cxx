@@ -12,12 +12,15 @@ run_it() {
 
 running_pp=false
 running_cc=false
+running_link=true
 
 # Guess what is actually running...
 for flag in "$@"; do
 	case "$flag" in
 		-E) running_pp=true ;;
-		-c|-S) running_cc=true ;;
+		-c|-S)
+		    running_cc=true
+		    running_link=false;;
 		*) ;;
 	esac
 done
@@ -25,6 +28,8 @@ done
 # ...and pass the correct flags
 if $running_pp; then
 	run_it $HELENOS_CROSS_PATH/$HSCT_REAL_CXX $HSCT_CPPFLAGS "$@"
+elif $running_link; then
+	run_it $HELENOS_CROSS_PATH/$HSCT_REAL_CXX $HSCT_CPPFLAGS $HSCT_CXXFLAGS $HSCT_LDFLAGS "$@" $HSCT_LDLIBS -lcpp
 elif $running_cc; then
 	run_it $HELENOS_CROSS_PATH/$HSCT_REAL_CXX $HSCT_CPPFLAGS $HSCT_CXXFLAGS "$@"
 else

@@ -57,8 +57,7 @@ build() {
 	msg "Building..."
 
 	run make -j$shipfunnels \
-	    CFLAGS="-D__HELENOS__" \
-	    LIBS="-lcpp -lSDL"
+	    CFLAGS="-D__HELENOS__"
 }
 
 package() {
